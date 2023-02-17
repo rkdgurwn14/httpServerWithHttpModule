@@ -68,6 +68,23 @@ const simpleApi = (request, response) => {
       response.writeHead(200, { "Content-Type": "application/json" });
       response.end(JSON.stringify({ posts: posts }));
     });
+  } else if (request.method === "GET" && request.url === "/users-posts") {
+    const postArray = [];
+    for (let i = 0; i < users.length; i++) {
+      for (let j = 0; j < posts.length; j++) {
+        if (users[i].id === posts[j].userId) {
+          postArray.push({
+            userId: users[i].id,
+            userName: users[i].name,
+            postingId: posts[j].id,
+            postingTitle: posts[j].title,
+            postingContent: posts[j].content,
+          });
+        }
+      }
+    }
+    response.writeHead(200, { "Content-Type": "application/json" });
+    response.end(JSON.stringify({ posts: postArray }));
   }
 };
 
