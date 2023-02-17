@@ -51,6 +51,23 @@ const simpleApi = (request, response) => {
       response.writeHead(200, { "Content-Type": "application/json" }); // (4)
       response.end(JSON.stringify({ users: users }));
     });
+  } else if (request.method === "POST" && request.url === "/posts") {
+    let line = "";
+    request.on("data", (data) => {
+      line += data;
+    });
+    request.on("end", () => {
+      const post = JSON.parse(line);
+
+      posts.push({
+        id: post.id,
+        title: post.title,
+        content: post.content,
+        userId: post.userId,
+      });
+      response.writeHead(200, { "Content-Type": "application/json" });
+      response.end(JSON.stringify({ posts: posts }));
+    });
   }
 };
 
